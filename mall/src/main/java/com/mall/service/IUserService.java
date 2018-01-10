@@ -28,4 +28,37 @@ public interface IUserService {
      * @return
      */
     ServerResponse<String> register(User user);
+
+    /**
+     * 校验方法
+     * @param str
+     * @param type
+     * @return
+     */
+    ServerResponse<String> checkValid(String str, String type);
+
+    /**
+     * 找回密码问题
+     * @param username
+     * @return
+     */
+    ServerResponse<String> selectQuestion(String username);
+
+    /**
+     * 校验答案
+     * @param username
+     * @param question
+     * @param answer
+     * @return
+     */
+    ServerResponse<String> checkAnswer(String username,String question,String answer);
+
+    /**
+     * 忘记密码修改密码
+     * @param username
+     * @param passwordNew
+     * @param forgetToken
+     * @return
+     */
+    ServerResponse<String> forgetResetPassword(String username,String passwordNew,String forgetToken);
 }

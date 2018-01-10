@@ -151,20 +151,51 @@
       update_time = now()
     where id = #{id,jdbcType=INTEGER}
   </update>
+
   <!--添加检查用户的方法-->
   <select id="checkUsername" resultType="int" parameterType="string">
     select count(1) from mmall_user
     where username=#{username}
   </select>
+
   <!--添加检查Email的方法-->
   <select id="checkEmail" resultType="int" parameterType="string">
     select count(1) from mmall_user
     where email=#{email}
   </select>
+
   <!--添加登录的方法-->
   <select id="selectLogin" resultMap="BaseResultMap" parameterType="map">
     select <include refid="Base_Column_List" />
     from mmall_user
     where username=#{username}and password=#{password}
+  </select>
+
+  <!--添加查询验证问题的方法-->
+  <select id="selectQuestionByUsername" resultType="string" parameterType="string">
+    select question
+    from mmall_user
+    where username=#{username}
+  </select>
+
+  <!--添加检验问题答案的方法-->
+  <select id="checkAnswer" resultType="int" parameterType="map">
+      select count(1)
+      from mmall_user
+      where username=#{username}
+      and question=#{question}
+      and answer=#{answer}
+  </select>
+  <!--忘记密码修改的方法-->
+  <update id="updatePasswordByUsername" parameterType="map">
+    update mmall_user
+    set password=#{passwordNew},update_time=now()
+    where username=#{username}
+  </update>
+  <!--检查密码根据用户id-->
+  <select id="checkPassword" resultType="int" parameterType="map">
+    select count(1)
+    from mmall_user
+    where id=#{userId}
   </select>
 </mapper>

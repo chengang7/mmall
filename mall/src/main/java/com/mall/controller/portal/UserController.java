@@ -61,13 +61,83 @@ public class UserController {
      * @param user
      * @return
      */
-    @RequestMapping(value = "register.do",method = RequestMethod.POST)
+    @RequestMapping(value = "register.do",method = RequestMethod.GET)
     @ResponseBody
     public ServerResponse<String> register(User user){
         return iUserService.register(user);
     }
 
-/*    public ServerResponse<String> ckeckValid(String str,String type){
+    /**
+     * 该方法是为了防止恶意用户通过接口调用注册接口，
+     * 所以我们在注册的时候当输入完用户名跳到下一个
+     * 输入框时要进行一个实时验证
+     * @param str
+     * @param type
+     * @return
+     */
+    @RequestMapping(value = "ckeck_valid.do",method = RequestMethod.GET)
+    @ResponseBody
+    public ServerResponse<String> ckeckValid(String str,String type){
+        return iUserService.checkValid(str,type);
+    }
 
-    }*/
+    /**
+     * 获取用户信息
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "get_user_info.do",method = RequestMethod.GET)
+    @ResponseBody
+    public ServerResponse<User> getUserInfo(HttpSession session){
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user != null){
+            return ServerResponse.createBySuccess(user);
+        }
+        return ServerResponse.createByErrorMessage("用户未登录，无法获取用户信息");
+    }
+
+    /**
+     * 找回密码问题
+     * @param username
+     * @return
+     */
+    @RequestMapping(value = "forget_get_question.do",method = RequestMethod.GET)
+    @ResponseBody
+    public ServerResponse<String> forgetGetQusetion(String username){
+        return iUserService.selectQuestion(username);
+    }
+
+    /**
+     * 校验找回密码问题答案是否正确
+     */
+    @RequestMapping(value = "forget_check_answer.do",method = RequestMethod.GET)
+    @ResponseBody
+    public ServerResponse<String> forgetAnswer(String username,String question,String answer){
+        //先用本地的guawa缓存来做token,利用它的有效期来解决问题
+        return iUserService.checkAnswer(username,question,answer);
+    }
+
+    /**
+     * 忘记密码并修改密码
+     * @param username
+     * @param passwordNew
+     * @param forgetToken
+     * @return
+     */
+    @RequestMapping(value = "forget_reset_password.do",method = RequestMethod.GET)
+    @ResponseBody
+    public ServerResponse<String> forgetResetPassword(String username,String passwordNew,String forgetToken){
+        return iUserService.forgetResetPassword(username,passwordNew,forgetToken);
+    }
+
+    /**
+     * 登录状态下的密码重置功能
+     */
+    public ServerResponse<String> resetPassword(HttpSession session,String passwordOld,String passwordNew){
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user==null){
+            return ServerResponse.createByErrorMessage("用户未登录");
+        }
+        return null;
+    }
 }
