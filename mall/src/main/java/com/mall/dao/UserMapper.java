@@ -109,4 +109,11 @@ public interface UserMapper {
      */
     int checkPassword(@Param("username")String password,@Param("userId")Integer userId);
 
+    /**
+     * 根据id来更新用户email,不能更新id
+     * @param email
+     * @param userId
+     * @return
+     */
+    int checkEmailByUserId(@Param("email")String email,@Param("userId")Integer userId);
 }

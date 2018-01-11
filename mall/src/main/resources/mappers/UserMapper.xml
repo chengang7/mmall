@@ -198,4 +198,12 @@
     from mmall_user
     where id=#{userId}
   </select>
+  <!--根据id来更新用户email,不能更新id-->
+  <select id="checkEmailByUserId" resultType="int" parameterType="map">
+    select count(1)
+    from mmall_user
+    where email=#{email}
+    and id !=#{userId}
+  </select>
+
 </mapper>

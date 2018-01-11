@@ -61,4 +61,27 @@ public interface IUserService {
      * @return
      */
     ServerResponse<String> forgetResetPassword(String username,String passwordNew,String forgetToken);
+
+    /**
+     * 登录后重置密码方法
+     * @param passwordOld
+     * @param passwordNew
+     * @param user
+     * @return
+     */
+    ServerResponse<String> resetPassword(String passwordOld,String passwordNew,User user);
+
+    /**
+     * 更新个人信息
+     * @param user
+     * @return
+     */
+    ServerResponse<User> updateInformation(User user);
+
+    /**
+     * 获取用户详情信息
+     * @param userId
+     * @return
+     */
+    ServerResponse<User> getInformation(Integer userId);
 }
